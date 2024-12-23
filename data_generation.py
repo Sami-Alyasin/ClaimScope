@@ -208,7 +208,7 @@ def generate_claims(policyholders, avg_claims_per_customer=2):
             # location_risk_score modifies the base amount
             # e.g., a higher risk score => on average, 20% higher claims
             location_risk_score = holder["location_risk_score"]
-            claim_amount = base_amount * (1 + 0.2 * location_risk_score)
+            claim_amount = round(base_amount * (1 + 0.2 * location_risk_score), 2)
             claim_amount = max(200, claim_amount)  # clamp to a minimum
 
             # generate adjuster notes using the function we created
