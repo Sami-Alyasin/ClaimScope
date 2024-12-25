@@ -306,20 +306,42 @@ def introduce_noise_and_outliers(claims, outlier_fraction=0.02):
 def introduce_missing_values(df, missing_rate=0.05):
     """
     Randomly replace a fraction of the dataframe cells with NaN
-    to simulate real-world data.
+    to simulate real-world data. Only applied to the following fields:
+    - policy_id
+    - claim_id
+    - incident_date
+    - report_date
+    - age
+    - gender
+    - location
+    - location_risk_score
     """
 
+    # List of columns to apply the function to
+    applicable_columns = [
+            'policy_id', 'claim_id', 'incident_date', 
+            'report_date', 'age', 'gender', 
+            'location', 'location_risk_score'
+        ]
+    
     # Flatten the dataframe into an array
     arr = df.to_numpy().astype(object)
-    total_elements = arr.size
+    total_elements = sum([df[col].size for col in applicable_columns if col in df.columns])
 
     # Number of elements to be replaced with NaN
     num_missing = int(total_elements * missing_rate)
-    missing_positions = random.sample(range(total_elements), num_missing)
 
-    for pos in missing_positions:
-        row_idx = pos // df.shape[1]
-        col_idx = pos % df.shape[1]
+    # Get indices of applicable columns
+    applicable_col_indices = [df.columns.get_loc(col) for col in applicable_columns if col in df.columns]
+
+    # Select random positions for missing values only in applicable columns
+    missing_positions = []
+    while len(missing_positions) < num_missing:
+        row_idx = random.randint(0, df.shape[0] - 1)
+        col_idx = random.choice(applicable_col_indices)
+        missing_positions.append((row_idx, col_idx))
+
+    for row_idx, col_idx in missing_positions:
         arr[row_idx, col_idx] = np.nan
 
     # Reconstruct the DataFrame
