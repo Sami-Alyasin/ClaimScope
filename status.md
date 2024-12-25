@@ -24,14 +24,14 @@ This document tracks the progress of this project. Each step includes a status i
 
 4. **Model Training & Evaluation** 
 
-        In Progress 🚧
+        Done ✅
    - **Description**: Train various classification models (e.g., Logistic Regression, Random Forest, XGBoost). Evaluate performance using precision, recall, AUC, and confusion matrices.  
 
 ----
 
 5. **Model Explainability**  
 
-        To-Do 📋
+        In Progress 🚧
    - **Description**: Use tools like SHAP or LIME to understand which features drive the model’s fraud predictions and to build trust in the solution.  
 
 ----

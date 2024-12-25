@@ -1,5 +1,5 @@
 """
-data_generation.py
+01_data_generation.py
 
 Generates a synthetic insurance dataset with:
 1. Correlated features (e.g., age, location, claim amounts)
