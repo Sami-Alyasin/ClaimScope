@@ -18,13 +18,13 @@ This document tracks the progress of this project. Each step includes a status i
 
 3. **Data Cleaning & Feature Engineering** 
 
-        In Progress 🚧
+        Done ✅
    - **Description**: Handle missing values, outliers, and noise. Craft new features (e.g., time between incident and report, text-based indicators from notes) to improve fraud detection.  
 ----
 
 4. **Model Training & Evaluation** 
 
-        To-Do 📋
+        In Progress 🚧
    - **Description**: Train various classification models (e.g., Logistic Regression, Random Forest, XGBoost). Evaluate performance using precision, recall, AUC, and confusion matrices.  
 
 ----

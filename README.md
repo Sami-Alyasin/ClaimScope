@@ -108,7 +108,7 @@ Because real insurance claim data is sensitive, we generate synthetic data using
 
 To run data generation:
 ```bash
-python data_generation.py
+python 01_data_generation.py
 ```
 This produces a CSV file (e.g., `synthetic_claims.csv`) that will be used for modeling.
 
@@ -119,16 +119,21 @@ This produces a CSV file (e.g., `synthetic_claims.csv`) that will be used for mo
 1. **Data Preprocessing**  
    Run the preprocessing script to clean and transform the raw CSV:
    ```bash
-   python preprocess_data.py --input synthetic_claims.csv --output preprocessed_claims.csv
+   python 03_preprocess_data.py --input synthetic_claims.csv --output preprocessed_claims.csv
+   ```
+2. **Feature Engineering**  
+   Run the feature engineering script to create new features, handle missing data, and generate a CSV file that is ready for modeling:
+   ```bash
+   python 04_feature_engineering.py --input preprocessed_claims.csv --output processed_claims.csv
    ```
 
-2. **Model Training**  
+3. **Model Training**  
    Train your classification models (e.g., Logistic Regression, Random Forest, XGBoost):
    ```bash
-   python train_model.py --data preprocessed_claims.csv --model_type random_forest
+   python 05_modeling.py --data processed_claims.csv --model_type random_forest
    ```
 
-3. **Evaluation**  
+4. **Evaluation**  
    View evaluation metrics (accuracy, precision, recall, AUC, etc.) in your console or generated reports in the `reports/` directory.
 
 ---
@@ -169,18 +174,20 @@ A simple **Streamlit** app can be used to demonstrate real-time fraud checks:
 ```
 ClaimScope/
 │
-├── data/                    # Synthetic CSV files
-├── reports/                 # Evaluation reports (metrics, plots)
-├── notebooks/               # Jupyter notebooks for EDA & experimentation
-├── pages/                   # Pages of streamlit app
-├── models/                  # Saved model artifacts
-├── app.py                   # Streamlit app for deployment
-├── data_generation.py       # Script for creating synthetic dataset
-├── preprocess_data.py       # Cleans and structures raw CSV
-├── train_model.py           # Training & validation script
-├── requirements.txt         # Python dependencies
-├── status.md                # Status of the project
-└── README.md                # Project documentation
+├── data/                      # Synthetic CSV files
+├── reports/                   # Evaluation reports (metrics, plots)
+├── notebooks/                 # Jupyter notebooks for EDA & experimentation
+├── pages/                     # Pages of streamlit app
+├── models/                    # Saved model artifacts
+├── app.py                     # Streamlit app for deployment
+├── 01_data_generation.py      # Script for creating synthetic dataset
+├── 02_EDA.ipynb               # Notebook for Exploratory Data Analysis
+├── 03_preprocess_data.py      # Cleans and structures raw CSV
+├── 04_feature_engineering.py  # Create new features
+├── 05_modeling.py             # Training & validation script
+├── requirements.txt           # Python dependencies
+├── status.md                  # Status of the project
+└── README.md                  # Project documentation
 ```
 
 ---
