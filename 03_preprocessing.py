@@ -26,15 +26,17 @@ def main(input_file="ClaimScope/data/synthetic_claims.csv", output_file="ClaimSc
     if duplicates_removed > 0:
         print(f"Removed {duplicates_removed} duplicate rows.")
 
-    # 3. Drop rows that are missing critical fields, e.g. claim_id:
-    if "claim_id" in df.columns:
-        initial_len = len(df)
-        df.dropna(subset=["claim_id"], inplace=True)
-        dropped_na = initial_len - len(df)
-        if dropped_na > 0:
-            print(f"Dropped {dropped_na} rows missing critical 'claim_id' values.")
-
-    # 4. Save the Preprocessed Dataset
+    # 3. Drop rows that are missing both incident_date and report_date
+    initial_len = len(df)
+    df.dropna(subset=["incident_date", "report_date"], how="all", inplace=True)
+    dropped_na = initial_len - len(df)
+    if dropped_na > 0:
+        print(f"Dropped {dropped_na} rows missing both incident_date and report_date.")
+        
+    # 4. Drop rows with negative claim amounts
+    df = df[df["claim_amount"] >= 0]
+    
+    # 5. Save the Preprocessed Dataset
     print(f"Saving preprocessed data to {output_file}...")
     df.to_csv(output_file, index=False)
 
