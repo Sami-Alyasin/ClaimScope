@@ -60,11 +60,11 @@ def main():
     evaluate_model(rf, X_test, y_test)
 
     # 8. Save the Best Model (Assume Random Forest for demonstration)
-    with open("ClaimScope/models/fraud_detector_model.pkl", "wb") as f:
+    with open("/Users/sami/projects/ClaimScope/models/fraud_detector_model.pkl", "wb") as f:
         pickle.dump(rf, f)
 
     # Save the scaler as well
-    with open("ClaimScope/models/scaler.pkl", "wb") as f:
+    with open("/Users/sami/projects/ClaimScope/models/scaler.pkl", "wb") as f:
         pickle.dump(scaler, f)
 
     print("\nModel training complete. Best model saved as 'fraud_detector_model.pkl'.")
@@ -89,7 +89,10 @@ def main():
     plt.ylabel('Feature')
     plt.gca().set_facecolor('#f0f0f0')  # Set background color
     plt.grid(True, linestyle='--', alpha=0.7)   
-    plt.savefig("ClaimScope/visuals/feature_importance.png")
+    plt.savefig("/Users/sami/projects/ClaimScope/visuals/feature_importance.png")
+    
+    # export feature imporanace to csv
+    feature_importance_df.to_csv("/Users/sami/projects/ClaimScope/data/feature_importance.csv", index=False)
     
     
 def evaluate_model(model, X_test, y_test):

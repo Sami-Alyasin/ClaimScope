@@ -10,7 +10,7 @@ from sklearn.impute import SimpleImputer
 
 def main():
     # 1. Load the raw dataset
-    df = pd.read_csv("ClaimScope/data/preprocessed_claims.csv")
+    df = pd.read_csv("/Users/sami/projects/ClaimScope/data/preprocessed_claims.csv")
 
     # 2. Create New Features
 
@@ -37,7 +37,7 @@ def main():
     # since we have nulls, we'll fill them with "unknown", then we can apply the function to extract the location type
     df["location"] = df["location"].fillna("unknown")
     df["location_type"] = df["location"].apply(
-        lambda x: "urban" if "urban" in x.lower() else "suburban" if "suburban" in x.lower() else "rural"
+        lambda x: "suburban" if "suburban" in x.lower() else "urban" if "urban" in x.lower() else "rural"
     )
 
     # 3. Handle Missing Values
@@ -70,7 +70,7 @@ def main():
         df[col] = df[col].fillna("unknown")
 
     # 4. Save Processed Data
-    df.to_csv("ClaimScope/data/processed_claims.csv", index=False)
+    df.to_csv("/Users/sami/projects/ClaimScope/data/processed_claims.csv", index=False)
     print("Feature engineering complete. File saved: processed_claims.csv")
 
 if __name__ == "__main__":
