@@ -21,7 +21,6 @@ Refer to `status.md` to see the current progress
 - [Deployment](#deployment)  
 - [Project Structure](#project-structure)  
 - [Future Improvements](#future-improvements)  
-- [License](#license)
 
 ---
 
