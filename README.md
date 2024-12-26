@@ -38,7 +38,7 @@ Refer to `status.md` to see the current progress
 - **Synthetic Data Generation**: Create realistic policyholder and claims data with embedded fraud patterns.  
 - **Fraud Detection Models**: Implement and compare multiple classification models (Logistic Regression, Random Forest, XGBoost, etc.).  
 - **Feature Engineering & Text Analysis**: Analyze structured and unstructured fields (e.g., “adjuster notes”) for potential fraud indicators.  
-- **Model Evaluation & Explainability**: Use metrics like precision, recall, AUC, and confusion matrices. Integrate explainability tools (like SHAP).  
+- **Model Evaluation**: Use metrics like precision, recall, AUC, and confusion matrices.
 - **Deployment**: Demonstrate a simple web application (e.g., Streamlit or Flask) to visualize claims data and flag high-risk cases.
 
 ---
@@ -64,7 +64,6 @@ Refer to `status.md` to see the current progress
                 ▼
 ┌─────────────────────────────────┐
 │  Model Training & Evaluation    │
-│ (Classifiers + Explainability)  │
 └─────────────────────────────────┘
                 │
                 ▼
@@ -145,7 +144,6 @@ This produces a CSV file (e.g., `synthetic_claims.csv`) that will be used for mo
   - *Confusion Matrix:* to observe true vs. false positives.  
   - *Precision & Recall:* crucial for fraud detection (catch fraudulent claims without over-flagging legitimate ones).  
   - *ROC AUC:* overall performance indicator.  
-- **Explainability**: Tools like [SHAP](https://github.com/slundberg/shap) to highlight key features contributing to fraud predictions.
 
 ---
 
@@ -175,7 +173,7 @@ A simple **Streamlit** app can be used to demonstrate real-time fraud checks:
 ClaimScope/
 │
 ├── data/                      # Synthetic CSV files
-├── reports/                   # Evaluation reports (metrics, plots)
+├── visuals/                   # EDA & Feature Importance plots
 ├── notebooks/                 # Jupyter notebooks for EDA & experimentation
 ├── pages/                     # Pages of streamlit app
 ├── models/                    # Saved model artifacts
