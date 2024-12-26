@@ -29,28 +29,21 @@ This document tracks the progress of this project. Each step includes a status i
 
 ----
 
-5. **Model Explainability**  
+5. **Deployment**
 
         In Progress 🚧
-   - **Description**: Use tools like SHAP or LIME to understand which features drive the model’s fraud predictions and to build trust in the solution.  
-
-----
-
-6. **Deployment**
-
-        To-Do 📋
    - **Description**: Package the best-performing model into a web app (e.g., Streamlit or Flask). Provide a dashboard to upload new claims and see predicted fraud risk.  
 
 ----
 
-7. **Documentation** 
+6. **Documentation** 
 
         To-Do 📋
    - **Description**: Finalize project documentation.  
 
 ----
 
-8. **Maintenance & Future Enhancements**
+7. **Maintenance & Future Enhancements**
 
         To-Do 📋
    - **Description**: Plan for model monitoring, retraining schedules, and additional features (such as advanced NLP on adjuster notes or real-time streaming).  
