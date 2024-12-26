@@ -31,21 +31,20 @@ This document tracks the progress of this project. Each step includes a status i
 
 5. **Deployment**
 
-        In Progress 🚧
+        Done ✅
    - **Description**: Package the best-performing model into a web app (e.g., Streamlit or Flask). Provide a dashboard to upload new claims and see predicted fraud risk.  
 
 ----
-
 6. **Documentation** 
 
-        To-Do 📋
+        Done ✅
    - **Description**: Finalize project documentation.  
 
 ----
 
 7. **Maintenance & Future Enhancements**
 
-        To-Do 📋
+        In Progress 🚧
    - **Description**: Plan for model monitoring, retraining schedules, and additional features (such as advanced NLP on adjuster notes or real-time streaming).  
 
 
