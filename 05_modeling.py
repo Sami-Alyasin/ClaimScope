@@ -7,6 +7,8 @@ evaluates performance, and saves model artifacts.
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, classification_report, roc_auc_score
@@ -16,7 +18,7 @@ import pickle
 
 def main():
     # 1. Load Processed Data
-    df = pd.read_csv("ClaimScope/data/processed_claims.csv")
+    df = pd.read_csv("/Users/sami/projects/ClaimScope/data/processed_claims.csv")
 
     # 2. Define Features and Target
 
@@ -66,6 +68,29 @@ def main():
         pickle.dump(scaler, f)
 
     print("\nModel training complete. Best model saved as 'fraud_detector_model.pkl'.")
+    
+    #9. Generate feature importance visual
+    feature_columns = X_train.columns.to_list()
+
+    feature_importances = rf.feature_importances_
+    feature_importances
+
+    # Create a DataFrame for visualization
+    feature_importance_df = pd.DataFrame({
+        'Feature': feature_columns,
+        'Importance': feature_importances
+    }).sort_values(by='Importance', ascending=False)
+
+    # plot feature importances
+    plt.figure(figsize=(20, 6))
+    sns.barplot(x='Importance', y='Feature', hue='Feature', data=feature_importance_df, palette='viridis', dodge=False, legend=False)
+    plt.title('Feature Importance from Random Forest Regressor', fontsize=16, fontweight='bold')
+    plt.xlabel('Importance')
+    plt.ylabel('Feature')
+    plt.gca().set_facecolor('#f0f0f0')  # Set background color
+    plt.grid(True, linestyle='--', alpha=0.7)   
+    plt.savefig("ClaimScope/visuals/feature_importance.png")
+    
     
 def evaluate_model(model, X_test, y_test):
     """
