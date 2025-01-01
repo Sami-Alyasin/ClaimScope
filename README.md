@@ -21,6 +21,8 @@ Refer to `status.md` to see the current progress
 - [Deployment](#deployment)  
 - [Project Structure](#project-structure)  
 - [Future Improvements](#future-improvements)  
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
@@ -184,7 +186,8 @@ ClaimScope/
 ├── 05_modeling.py             # Training & validation script
 ├── requirements.txt           # Python dependencies
 ├── status.md                  # Status of the project
-└── README.md                  # Project documentation
+├── README.md                  # Project documentation
+└── LICENSE                    # License file
 ```
 
 ---
@@ -197,5 +200,18 @@ ClaimScope/
 
 ---
 
-**Questions or Feedback?**  
-Open an issue or submit a pull request on GitHub. Enjoy exploring `ClaimScope`!
+## License
+
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html#license-text). You are free to use, modify, and distribute this code under the terms of the GPLv3. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contact
+
+- **Project Maintainer**: Sami Alyasin   
+    - **Email**: Sami_Alyasin@outlook.com
+    - **GitHub**: [github.com/Sami-Alyasin](https://github.com/Sami-Alyasin)
+
+Feel free to reach out with any questions or suggestions. I hope you find this tool helpful!
+
+---
