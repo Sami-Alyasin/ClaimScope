@@ -69,7 +69,39 @@ def compute_suspicious_note_flag(adjuster_notes):
     """
     Computes the suspicious_note_flag based on adjuster_notes.
     """
-    suspicious_terms = ["inconsistent statements", "fabricated evidence", "urgent payout demanded"]
+
+    suspicious_terms = [
+        # Initial terms
+        "inconsistent statements", "fabricated evidence", "urgent payout demanded",
+        
+        # Documentation issues
+        "missing documentation", "altered documents", "backdated", "unclear documentation",
+        "conflicting reports", "unsigned documents", "incomplete forms", "multiple versions",
+        
+        # Behavior patterns
+        "aggressive demands", "threatening language", "refuses to cooperate", "avoids contact",
+        "changes story", "excessive complaints", "unreachable claimant", "repeat claims",
+        
+        # Timing and circumstances
+        "late reporting", "convenient timing", "recent policy change", "policy about to lapse",
+        "weekend incident", "no witnesses", "suspicious timing", "multiple policies",
+        
+        # Financial indicators
+        "financial difficulties", "bankruptcy filing", "debt mentioned", "overvalued claim",
+        "multiple claims history", "previous denials", "inflated values", "cash only",
+        
+        # Medical red flags
+        "pre existing condition", "doctor shopping", "minimal damage", "excessive treatment",
+        "soft tissue only", "delayed symptoms", "multiple providers", "refuses examination",
+        
+        # Vehicle/Property specific
+        "prior damage", "mechanical failure", "maintenance issues", "wear and tear",
+        "unknown location", "unwitnessed theft", "suspicious fire", "vacant property",
+        
+        # Communication patterns
+        "third party pressure", "lawyer immediate", "rehearsed statement", "scripted answers",
+        "defensive responses", "evasive answers", "contradictory info", "refuses details"
+    ]
     adjuster_notes = str(adjuster_notes).lower()
     return int(any(term in adjuster_notes for term in suspicious_terms))
 
@@ -139,7 +171,9 @@ def preprocess_input(user_input, model_features):
     # 7. Reorder columns to match model's expected input
     feature_df = feature_df[model_features]
 
-    return feature_df
+    # return feature_df
+    return feature_df[model_features], report_delay_days
+
 
 
 # ------------------------
@@ -148,7 +182,7 @@ def preprocess_input(user_input, model_features):
 st.set_page_config(
     page_title="Submit a new claim - ClaimScope",
     page_icon="📄",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded",
 )
 
@@ -162,62 +196,65 @@ st.markdown("""
 # 2. User Input Form
 # ------------------------
 # split the input data into two columns
-col1, col2 = st.columns(2)
 
 with st.form(key='claim_form'):
-    claim_amount = st.number_input(
-        "🔢 Claim Amount ($)",
-        min_value=0.0,
-        step=1.0,
-        format="%.2f",
-        help="Enter a positive number for the claim amount."
-    )
+    col1, col2 = st.columns(2)
+    with col1:
+        claim_amount = st.number_input(
+            "🔢 Claim Amount ($)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f",
+            help="Enter a positive number for the claim amount."
+        )
 
-    age = st.number_input(
-        "🎂 Age of Policyholder",
-        min_value=18,
-        max_value=90,
-        step=1,
-        help="Enter the age of the policyholder (18-90)."
-    )
+        age = st.number_input(
+            "🎂 Age of Policyholder",
+            min_value=18,
+            max_value=90,
+            step=1,
+            help="Enter the age of the policyholder (18-90)."
+        )
 
-    claim_date = st.date_input(
-        "📅 Claim Date",
-        min_value=datetime(1900, 1, 1),
-        max_value=datetime.today(),
-        help="Select the date when the claim occurred."
-    )
+        claim_date = st.date_input(
+            "📅 Claim Date",
+            min_value=datetime(1900, 1, 1),
+            max_value=datetime.today(),
+            help="Select the date when the claim occurred."
+        )
 
-    report_date = st.date_input(
-        "🗓️ Claim Report Date",
-        min_value=claim_date,
-        max_value=datetime(2090,12,31),
-        help="Select the date when the claim was reported."
-    )
+        report_date = st.date_input(
+            "🗓️ Claim Report Date",
+            min_value=claim_date,
+            max_value=datetime(2090,12,31),
+            help="Select the date when the claim was reported."
+        )
+        
+        claim_type = st.selectbox(
+            "📂 Claim Type",
+            options=["Auto", "Health", "Liability", "Property"],
+            help="Select the type of claim."
+        )
+    with col2:
+        adjuster_notes = st.text_area(
+            "📝 Adjuster Notes",
+            height=206,
+            help="Enter any notes made by the adjuster. These notes are analyzed for suspicious terms."
+        )
 
-    adjuster_notes = st.text_area(
-        "📝 Adjuster Notes",
-        height=150,
-        help="Enter any notes made by the adjuster. These notes are analyzed for suspicious terms."
-    )
 
-    claim_type = st.selectbox(
-        "📂 Claim Type",
-        options=["Auto", "Health", "Liability", "Property"],
-        help="Select the type of claim."
-    )
 
-    gender = st.selectbox(
-        "👤 Gender",
-        options=["Male", "Female", "Unknown"],
-        help="Select the gender of the policyholder."
-    )
+        gender = st.selectbox(
+            "👤 Gender",
+            options=["Male", "Female", "Unknown"],
+            help="Select the gender of the policyholder."
+        )
 
-    location_type = st.selectbox(
-        "📍 Location Type",
-        options=["Urban", "Suburban", "Rural"],
-        help="Select the type of location where the claim originated."
-    )
+        location_type = st.selectbox(
+            "📍 Location Type",
+            options=["Urban", "Suburban", "Rural"],
+            help="Select the type of location where the claim originated."
+        )
 
     submit_button = st.form_submit_button(label='Evaluate')
 
@@ -254,21 +291,40 @@ if submit_button:
             # 5. Predict Fraud Risk
             # ------------------------
             try:
-                prediction = model.predict(feature_vector)[0]
-                probability = model.predict_proba(feature_vector)[0][1]
+                feature_vector, delay_days = preprocess_input(user_input, model_features)
+                base_probability = model.predict_proba(feature_vector)[0][1]
+                
+                # Adjust probability based on delay
+                if delay_days <= 30:
+                    adjusted_probability = base_probability
+                elif delay_days <= 60:
+                    adjusted_probability = min(base_probability * 1.5, 1.0)
+                elif delay_days <= 90:
+                    adjusted_probability = min(base_probability * 2, 1.0)
+                else:
+                    adjusted_probability = min(base_probability * 4, 1.0)
+                    
+
+                probability = adjusted_probability
+                
             except Exception as e:
                 st.error(f"🚫 Error during prediction: {e}")
             else:
                 # ------------------------
                 # 6. Display Prediction
                 # ------------------------
-                if prediction == 1:
-                    st.error(f"🚨 **Based on the data provided, this claim is probably **Fraudulent**.**")
-                    st.info(f"🔍 Fraud Risk Probability: {probability:.2f}")
+                if probability == 1:
+                    st.error(f"**Fraud Risk Probability: {probability:.2f}**", icon = ":material/search_insights:")
+                    st.error(f"🚨 **Based on the data provided, this claim's Fraud Risk Probability score is: {probability:.2f}, indicating it must be reviewed for potential fraud.**")
+                
+                elif probability >= 0.5:
+                    st.warning(f"**Fraud Risk Probability: {probability:.2f}**", icon = ":material/search_insights:")
+                    st.warning(f"⚠️ **Based on the data provided, this claim's Fraud Risk Probability score is: {probability:.2f}, indicating it may be fraudulent.**")
+                    
                 else:
-                    st.success(f"✅ **Based on the data provided, this claim is probably **Not Fraudulent**.**")
-                    st.info(f"🔍 Fraud Risk Probability: {probability:.2f}")
-
+                    st.success(f"**Fraud Risk Probability: {probability:.2f}**", icon = ":material/search_insights:")
+                    st.success(f"✅ **Based on the data provided, this claim's Fraud Risk Probability score is: {probability:.2f}, indicating it's probably not fraudulent.**")
+                
 # ------------------------
 # 7. Footer
 # ------------------------
